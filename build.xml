@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="jar" name="DbManager">
+
+    <!--  
+     set global properties for this build 
+      -->
+      
+    <property name="progetto" value="DbManager"/>
+    
+    <property name="base.dir" value="."/>
+    <property name="lib" value="${base.dir}/lib"/>
+    <property name="src" value="${base.dir}/src"/>
+    <property name="dest" value="${basedir}/classes"/>
+    <property name="javadoc" value="${basedir}/doc"/>
+
+
+    <target name="init">
+        <mkdir dir="${dest}"/>
+    </target>
+
+    <target depends="init" name="compile">
+        <javac debug="on" destdir="${dest}" failonerror="true"  optimize="on" srcdir="${src}" deprecation="on">
+          <classpath>
+            <fileset dir="${lib}">
+              <include name="**/*.jar"/>
+            </fileset>
+          </classpath>
+        </javac>
+    </target>
+
+
+    <target name="clean">
+        <delete dir="${dest}"/>
+    </target>
+
+    
+	<target name="javadoc" depends="init">
+    	<mkdir dir="${javadoc}" />
+    	
+    	<javadoc
+    		destdir="${javadoc}"
+    		use="true"
+    		verbose="yes"
+    		packagenames="*"
+    		sourcepath="${src}"
+    		windowtitle="Filippetti Commons">
+    	
+			<classpath>
+				<fileset dir="${classpath}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+			
+		</javadoc>
+    </target>
+
+
+    <target depends="clean, compile" name="rebuild"/>
+    
+    <target depends="compile" name="jar">
+		<mkdir dir="${lib}"/>
+		<jar jarfile="${lib}/${progetto}.jar" basedir="${dest}" />
+    </target>
+ 
+</project>

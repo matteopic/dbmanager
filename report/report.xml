@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<report name="Struttura DB" pageformat="A4" topmargin="20" leftmargin="20" bottommargin="20" rightmargin="20">
+
+    <reportheader height="48" fontname="Serif" fontstyle="bold" fontsize="18">
+        <label name="Label 1" x="0" y="0" width="100%" height="24" alignment="center" baseline="20">Struttura del database</label>
+    </reportheader>
+
+    <reportfooter height="48" fontname="Serif" fontstyle="bold" fontsize="16">
+       <!--label name="Label 2" x="0" y="0" width="100%" height="24" alignment="center"></label-->
+    </reportfooter>
+
+    <!--pageheader height="18" fontname="Serif" fontstyle="plain" fontsize="10" onfirstpage="true">
+        <rectangle x="0" y="0" width="100%" height="100%" color="#AFAFAF" weight="0"/>
+        <date-function name="date1" x="0" y="0" width="100%" height="14" alignment="right" baseline="12" format="d-MMM-yyyy" function="report_date"/>
+        <line name="line1" x1="0" y1="16" x2="0" y2="16" color="#CFCFCF" weight="2.0"/>
+    </pageheader-->
+
+    <pagefooter height="18" fontsize="8">
+        <!-- insert a page number field here -->
+	<number-field fieldname="PageNumber" format="- 0 -" x="0" y="9" width="100%" height="18" alignment="center"/>
+    </pagefooter>
+
+    <groups>
+        <group name="NomeTabella">
+            <groupheader height="30" fontname="Monospaced" fontstyle="bold" fontsize="8">
+                <rectangle name="background" x="0" y="1" width="100%" height="12" color="#DFDFDF" weight="0"/>
+                <string-field name="Nome Tabella" x="0" y="2" width="250" height="12" alignment="left" fieldname="NomeTabella" fontsize="10"/>
+                
+        		<label name="Nome Colonna" x="0" y="13" width="176" height="8" alignment="left">Nome Colonna</label>
+   				<label name="Tipo Colonna" x="100" y="13" width="176" height="8" alignment="left">Tipo</label>
+   				<label name="Dimensione Colonna" x="195" y="13" width="50" height="8" alignment="center">Dimensione</label>
+   				<label name="ALLOW_NULL" x="280" y="13" width="40" height="16" alignment="center">Consenti null</label>
+   				<label name="Key" x="350" y="13" width="60" height="8" alignment="center">Key</label>
+   				<label x="430" y="13" width="90" height="8" alignment="center">Default</label>
+				<line name="line1" x1="0" y1="30" x2="0" y2="30" weight="0.5"/>
+            </groupheader>
+            <groupfooter height="10"></groupfooter>
+            <fields>
+                 <field>NomeTabella</field>
+            </fields>
+        </group>
+	</groups>
+
+    <items height="10" fontname="Serif" fontstyle="plain" fontsize="8">
+        <!--rectangle name="background" x="0" y="0" width="100%" height="100%" color="#DFDFDF" weight="0"/-->
+        <!--line name="top" x1="0" y1="0" x2="0" y2="0" weight="0.1"/>
+        <line name="bottom" x1="0" y1="10" x2="0" y2="10" weight="0.1"/-->
+        <string-field name="NomeColonna" x="0" y="2" width="176" height="8" alignment="left" fieldname="NomeColonna" />
+   		<string-field name="TipoColonna" x="100" y="2" width="176" height="8" alignment="left" fieldname="TipoColonna" />
+   		<string-field name="DimensioneColonna" x="195" y="2" width="50" height="8" alignment="center" fieldname="DimensioneColonna" />
+   		<string-field name="AllowNull" x="280" y="2" width="40" height="8" alignment="center" fieldname="AllowNull" />
+   		<string-field name="PrimaryKey" x="350" y="2" width="60" height="8" alignment="center" fieldname="PrimaryKey" nullstring=""/>
+   		<string-field name="DefaultValue" x="430" y="2" width="90" height="8" alignment="center" fieldname="DefaultValue" nullstring=""/>
+   </items>
+
+    <functions>
+      <function name="PageNumber" class="org.jfree.report.function.PageFunction"/>
+    </functions>
+</report>

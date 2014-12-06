@@ -1,0 +1,26 @@
+package dbmanager.autocompletion;
+import javax.swing.*;
+import java.io.*;
+
+public class PathCompletion
+{
+
+	public static void main(String args[])
+	{
+
+		JFrame f = new JFrame("Path Completion");
+
+		TextPaneAutoCompletion textAuto =
+			new TextPaneAutoCompletion(new PathCompletionModel());
+
+		textAuto.setActivationKeyChar(File.separatorChar);
+		char seps[] = { '\t', '\n', File.pathSeparatorChar}; // Non includiamo spazi, in quanto possibili caratteri in un file
+		textAuto.setSeparators(seps);
+		f.getContentPane().add("Center", new JScrollPane(textAuto));
+		f.getContentPane().add(
+			"North",
+			new JLabel("File Separator: "+ File.separatorChar+ " - "+ System.getProperty("os.name")));
+		f.setSize(400, 400);
+		f.setVisible(true);
+	}
+}
