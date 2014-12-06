@@ -18,7 +18,7 @@ public class SalvaFile{
 	private boolean confermaSovrascittura(File fileToSave)throws IOException{
 		int confirm = JOptionPane.showConfirmDialog(
 				parent,
-				fileToSave.getCanonicalPath() + " esiste gi‡.\nSostituirlo ?",
+				fileToSave.getCanonicalPath() + " esiste gi√†.\nSostituirlo ?",
 				"Salva con nome",
 				JOptionPane.YES_NO_CANCEL_OPTION);
 
