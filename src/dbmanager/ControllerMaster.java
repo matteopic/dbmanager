@@ -58,6 +58,9 @@ public class ControllerMaster {
         }
     }
 
+    public DatabaseProperties getDatabaseProperties(){
+    	return prop;
+    }
 
 
     public void esegui() {

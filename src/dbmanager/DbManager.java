@@ -10,8 +10,6 @@ public class DbManager {
     
     public void start(){
 		Master master = new Master();
-        ControllerMaster cm = new ControllerMaster(master);
-        master.setController(cm);
 
         //Nel frattempo inizializzo il report
         Thread t = new Thread(){

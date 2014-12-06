@@ -25,90 +25,96 @@ import dbmanager.tools.TablesDifferences;
  *
  * @author Matteo Piccinini
  */
-public class DifferenceTree extends JFrame{
+public class DifferenceTree extends JFrame {
 
-    private static final long serialVersionUID = -4088830710260799907L;
+	private static final long serialVersionUID = -4088830710260799907L;
 
-    public DifferenceTree(final Connection conn1, final Connection conn2){
-        super("Databases Differences");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JLabel label = new JLabel("Processing...");
-        getContentPane().add(label);       
-        
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                initGUI(conn1, conn2);
-            }
-        });
-    }
+	public DifferenceTree(final DatabaseProperties prop1,
+			final DatabaseProperties prop2) {
+		super("Databases Differences");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		JLabel label = new JLabel("Processing...");
+		getContentPane().add(label);
 
-    private void initGUI(Connection conn1, Connection conn2){
-//        pack();
-//        setLocationRelativeTo(null);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				initGUI(prop1, prop2);
+			}
+		});
+	}
 
-        
-        buttonExpand = new JButton("Espandi");
-        buttonCollapse = new JButton("Comprimi");
-        JToolBar toolbar = new JToolBar();
-        toolbar.add(buttonExpand);
-        toolbar.add(buttonCollapse);
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(toolbar, BorderLayout.NORTH);
-        
-        try{
-            DatabaseProperties prop1 = new DatabaseProperties(conn1);
-            DatabaseProperties prop2 = new DatabaseProperties(conn2);
-            conn1.close();
-            conn2.close();
+	private void initGUI(DatabaseProperties prop1, DatabaseProperties prop2) {
+		// pack();
+		// setLocationRelativeTo(null);
 
-            TablesDifferences td = new TablesDifferences(prop1, prop2);
-            DifferenceTreeComposer dtc = new DifferenceTreeComposer();
-            dtc.setDifferences(td);
+		buttonExpand = new JButton("Espandi");
+		buttonCollapse = new JButton("Comprimi");
+		JToolBar toolbar = new JToolBar();
+		toolbar.add(buttonExpand);
+		toolbar.add(buttonCollapse);
+		getContentPane().setLayout(new BorderLayout());
+		getContentPane().add(toolbar, BorderLayout.NORTH);
 
-            tree = new AdvancedTree(dtc.getModel());
-            tree.setCellRenderer(new DifferenceTreeRenderer());
-            tree.expandAll();
-            
-            buttonExpand.addActionListener(new ActionListener(){
-                public void actionPerformed(ActionEvent e) {
-                    tree.expandAll();
-                }
-            });
-            
-            buttonCollapse.addActionListener(new ActionListener(){
-                public void actionPerformed(ActionEvent e) {
-                    tree.collapseAll();
-                }
-            });
-        
-            getContentPane().add(new JScrollPane(tree), BorderLayout.CENTER);
-            pack();
-            setLocationRelativeTo(null);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-    
-    public static void main(String[] args) {
-        try {
-            String url1 = "jdbc:mysql://localhost/jaco";
-            String driver1 = "com.mysql.jdbc.Driver";
-            Class.forName(driver1);
-            Connection conn1 = DriverManager.getConnection(url1, "root", "");
+		try {
+			// DatabaseProperties prop1 = new DatabaseProperties(conn1);
+			// DatabaseProperties prop2 = new DatabaseProperties(conn2);
+			// conn1.close();
+			// conn2.close();
 
-            String url2 = "jdbc:mysql://192.168.0.44/jaco";
-            String driver2 = "com.mysql.jdbc.Driver";
-            Class.forName(driver2);
-            Connection conn2 = DriverManager.getConnection(url2, "admin", "5ez10ne");
+			TablesDifferences td = new TablesDifferences(prop1, prop2);
+			DifferenceTreeComposer dtc = new DifferenceTreeComposer();
+			dtc.setDifferences(td);
 
-            DifferenceTree dt = new DifferenceTree(conn1, conn2);
-            dt.setVisible(true);
+			tree = new AdvancedTree(dtc.getModel());
+			tree.setCellRenderer(new DifferenceTreeRenderer());
+			tree.expandAll();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private JButton buttonExpand, buttonCollapse;
-    private AdvancedTree tree;
+			buttonExpand.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					tree.expandAll();
+				}
+			});
+
+			buttonCollapse.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					tree.collapseAll();
+				}
+			});
+
+			getContentPane().add(new JScrollPane(tree), BorderLayout.CENTER);
+			pack();
+			setLocationRelativeTo(null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
+		try {
+			String url1 = "jdbc:mysql://localhost/jaco";
+			String driver1 = "com.mysql.jdbc.Driver";
+			Class.forName(driver1);
+			Connection conn1 = DriverManager.getConnection(url1, "root", "");
+
+			String url2 = "jdbc:mysql://192.168.0.44/jaco";
+			String driver2 = "com.mysql.jdbc.Driver";
+			Class.forName(driver2);
+			Connection conn2 = DriverManager.getConnection(url2, "admin",
+					"5ez10ne");
+
+			DatabaseProperties prop1 = new DatabaseProperties(conn1);
+			DatabaseProperties prop2 = new DatabaseProperties(conn2);
+			conn1.close();
+			conn2.close();
+
+			DifferenceTree dt = new DifferenceTree(prop1, prop2);
+			dt.setVisible(true);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private JButton buttonExpand, buttonCollapse;
+	private AdvancedTree tree;
 }

@@ -17,7 +17,7 @@ public class BottomPane extends JPanel{
     public BottomPane(){
 		status = new Status();
 		scroller = new JScrollPane();
-
+		textarea = new JTextArea();
 		setLayout(new GridBagLayout());
 
 		GridBagConstraints constr = new GridBagConstraints();
@@ -36,7 +36,7 @@ public class BottomPane extends JPanel{
 
 	}
 
-	public void setRecords(JTable dati){
+	public void showRecords(JTable dati){
 		this.dati = dati;
 		if (dati != null){
 			status.setNumeroRecord(dati.getRowCount());
@@ -49,17 +49,25 @@ public class BottomPane extends JPanel{
 
 	}
 
-	public void setText(JTextArea textarea){
+	public void showMessage(String message) {
+		dati = null;
+		textarea.append(message);
 		JViewport vw =  scroller.getViewport();
-		if (textarea != null)vw.setView(textarea);
+		vw.setView(textarea);
 	}
+	
+//	public void setText(JTextArea textarea){
+//		JViewport vw =  scroller.getViewport();
+//		if (textarea != null)vw.setView(textarea);
+//	}
 
 	public JTable getRecords(){ return dati; }
 
 
 	private Status status;
 	private JTable dati;
-//	private JTextArea textarea;
+	private JTextArea textarea;
 	private JScrollPane scroller;
+
 
 }
