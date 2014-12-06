@@ -1,7 +1,7 @@
 package dbmanager.gui;
 
 import java.awt.Color;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -18,10 +18,10 @@ public class SQLStyledDocument extends DefaultStyledDocument{
      */
     private static final long serialVersionUID = 2017804069173618561L;
     public SQLStyledDocument(){
-		keywords = new Vector();
-		sfunctions = new Vector();
-		nfunctions = new Vector();
-		types = new Vector();
+		keywords = new ArrayList<String>();
+		sfunctions = new ArrayList<String>();
+		nfunctions = new ArrayList<String>();
+		types = new ArrayList<String>();
 
 		keywords.add("*");
 		keywords.add("alter");
@@ -116,7 +116,7 @@ public class SQLStyledDocument extends DefaultStyledDocument{
 
 
 	public Word[] getWords(String from){
-		Vector words = new Vector();
+		ArrayList<Word> words = new ArrayList<Word>();
 
 		int offset = 0;
 		int length = from.length();
@@ -235,7 +235,7 @@ public class SQLStyledDocument extends DefaultStyledDocument{
 			int slcs = word.indexOf(singleLineComment);
 			if (slcs == -1)slcs = word.indexOf(singleLineCommentAlt);
 
-			//Se nella parola ricevuta è contenuto l'inizio del commento su una sola riga cerco la fine della riga
+			//Se nella parola ricevuta Ã¨ contenuto l'inizio del commento su una sola riga cerco la fine della riga
 			if (slcs != -1){
 				lineCommentStartIndex = theWord.getOffset() + slcs;
 				lineCommentEndIndex = getText().substring(lineCommentStartIndex).indexOf("\n");
@@ -246,7 +246,7 @@ public class SQLStyledDocument extends DefaultStyledDocument{
 		if (multiLineCommentStartIndex == -1){
 			int mlcs = word.indexOf(multiLineCommentStart);
 
-			//Se nella parola ricevuta è contenuto l'inizio del commento su una sola riga cerco la fine del commento
+			//Se nella parola ricevuta Ã¨ contenuto l'inizio del commento su una sola riga cerco la fine del commento
 			if (mlcs != -1){
 				multiLineCommentStartIndex = theWord.getOffset() + mlcs;
 				multiLineCommentEndIndex = getText().substring(multiLineCommentStartIndex).indexOf("*/");
@@ -257,7 +257,7 @@ public class SQLStyledDocument extends DefaultStyledDocument{
 		if (stringStartIndex == -1){
 			int str = word.indexOf(stringValue);
 
-			//Se nella parola ricevuta è contenuto l'inizio della stringa cerco la fine
+			//Se nella parola ricevuta Ã¨ contenuto l'inizio della stringa cerco la fine
 			if (str != -1){
 				stringStartIndex = theWord.getOffset() + str;
 				stringEndIndex = getText().substring(stringStartIndex).indexOf("'");
@@ -300,7 +300,7 @@ public class SQLStyledDocument extends DefaultStyledDocument{
 
 	/**
 
-		Imposta la stringa che identifica l'inizio di un commento su una singola riga. "#" è il valore di default
+		Imposta la stringa che identifica l'inizio di un commento su una singola riga. "#" ï¿½ il valore di default
 
 	*/
 
@@ -308,19 +308,19 @@ public class SQLStyledDocument extends DefaultStyledDocument{
 
 
 	/**
-		Imposta la stringa che identifica il valore alternativo all'inizio di un commento su una singola riga. "--" è il valore di default
+		Imposta la stringa che identifica il valore alternativo all'inizio di un commento su una singola riga. "--" ï¿½ il valore di default
 	*/
 	public void setSingleLineCommentAlt(String singleLineCommentAlt){ this.singleLineCommentAlt = singleLineCommentAlt; }
 
 
 	/**
-		Imposta la stringa che identifica l'inzio di un commento su più righe. "/*" è il valore di default
+		Imposta la stringa che identifica l'inzio di un commento su piï¿½ righe. "/*" ï¿½ il valore di default
 	*/
 	public void setMultiLineCommentStart(String multiLineCommentStart){ this.multiLineCommentStart = multiLineCommentStart; }
 
 
 	/**
-		Imposta la stringa che identifica la fine di un commento su più righe.
+		Imposta la stringa che identifica la fine di un commento su piï¿½ righe.
 	*/
 	public void setMultiLineCommentEnd(String multiLineCommentEnd){ this.multiLineCommentEnd = multiLineCommentEnd; }
 
@@ -334,7 +334,7 @@ public class SQLStyledDocument extends DefaultStyledDocument{
 
 	public String getMultiLineCommentEnd(){ return multiLineCommentEnd; }
 
-	private Vector keywords, sfunctions, nfunctions, types;
+	private ArrayList<String> keywords, sfunctions, nfunctions, types;
 	private SimpleAttributeSet kas, das, nas, fas, commento, string, type;
 
 
