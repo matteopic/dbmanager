@@ -43,7 +43,7 @@
     		verbose="yes"
     		packagenames="*"
     		sourcepath="${src}"
-    		windowtitle="Filippetti Commons">
+    		windowtitle="dbmanager">
     	
 			<classpath>
 				<fileset dir="${classpath}">
