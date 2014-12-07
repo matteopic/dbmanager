@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
+import dbmanager.gui.OverlayIcon;
+
 /**
  *
  * @author Matteo Piccinini
@@ -20,8 +22,20 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 public class DifferenceTreeRenderer extends DefaultTreeCellRenderer {
 
     private static final long serialVersionUID = -2923449797473556742L;
+    
+    
+    public DifferenceTreeRenderer(){
+    	loadIcons();
+    }
 
-    public Component getTreeCellRendererComponent(JTree tree, Object value,
+    private void loadIcons() {
+    	tableIcon = new OverlayIcon(new ImageIcon("img/table.png"));
+    	columnIcon = new OverlayIcon(new ImageIcon("img/column.png"));
+        out = new ImageIcon("img/overlay_16_outgo.png");
+    	in = new ImageIcon("img/overlay_16_incom.png");
+	}
+
+	public Component getTreeCellRendererComponent(JTree tree, Object value,
                boolean selected, boolean expanded,
                boolean leaf, int row, boolean hasFocus){
 //        System.out.println(value + " " + value.getClass().getName());
@@ -38,20 +52,47 @@ public class DifferenceTreeRenderer extends DefaultTreeCellRenderer {
     	String name = value.getNodeName();
     	String key = value.getDifferenceKey();
     	String txt = key != null ? key + " = " + name : name;
-
         JLabel label = (JLabel)super.getTreeCellRendererComponent(tree, txt, selected, expanded, leaf, row, hasFocus);
 //        String txt = label.getText();
 //        if (txt == null)
 //            return label;
 
+        OverlayIcon ico = null;
+        int level = value.getLevel();
+        switch (level) {
+		case 0:
+			break;
+
+		case 1:
+			ico = tableIcon;
+			label.setIcon(ico);
+			break;
+
+		case 2:
+			ico = columnIcon;
+			label.setIcon(ico);
+			break;
+
+		default:
+			break;
+		}
+
+        if(ico != null)ico.clearOverlays();
+
         int diffType = value.getDiffType();
         switch (diffType) {
             case DifferenceTreeNode.ADD:
-                label.setIcon(getOutIcon());
+            	if(ico != null)
+            		ico.addOverlay(out);
+            	else
+            		label.setIcon(out);
                 break;
 
             case DifferenceTreeNode.DEL:
-                label.setIcon(getInIcon());
+            	if(ico != null)
+            		ico.addOverlay(in);
+            	else
+            		label.setIcon(in);
                 break;
 
             //case DifferenceTreeNode.NONE:            
@@ -61,15 +102,9 @@ public class DifferenceTreeRenderer extends DefaultTreeCellRenderer {
         return label;    
     }
     
-    private Icon getOutIcon(){
-        if (out == null)out = new ImageIcon("img/outgo_synch.gif");
-        return out;
-    }
+
     
-    private Icon getInIcon(){
-        if (in == null)in = new ImageIcon("img/incom_synch.gif");
-        return in;
-    }
-    
+    private OverlayIcon tableIcon, columnIcon, fieldIcon;
     private Icon in, out;
 }
+
