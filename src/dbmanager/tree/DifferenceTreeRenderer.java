@@ -35,11 +35,15 @@ public class DifferenceTreeRenderer extends DefaultTreeCellRenderer {
     public Component getTreeCellRendererComponent(JTree tree, DifferenceTreeNode value,
             boolean selected, boolean expanded,
             boolean leaf, int row, boolean hasFocus){
-        JLabel label = (JLabel)super.getTreeCellRendererComponent(tree, value, selected, expanded, leaf, row, hasFocus);
-        String txt = label.getText();
-        if (txt == null)
-            return label;
-        
+    	String name = value.getNodeName();
+    	String key = value.getDifferenceKey();
+    	String txt = key != null ? key + " = " + name : name;
+
+        JLabel label = (JLabel)super.getTreeCellRendererComponent(tree, txt, selected, expanded, leaf, row, hasFocus);
+//        String txt = label.getText();
+//        if (txt == null)
+//            return label;
+
         int diffType = value.getDiffType();
         switch (diffType) {
             case DifferenceTreeNode.ADD:

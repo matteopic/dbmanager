@@ -21,20 +21,21 @@ public class ColumnsDifferences extends AbstractDifferences{
     public ColumnsDifferences(Table table1, Table table2){
         this.table1 = table1;
         this.table2 = table2;
-        List columnNames1 = columnNamesList(table1);
-        List columnNames2 = columnNamesList(table2);
+        List<String> columnNames1 = columnNamesList(table1);
+        List<String> columnNames2 = columnNamesList(table2);
         processDiffs(columnNames1, columnNames2);
     }
-    
-    private List columnNamesList(Table table) {
-        if (table == null)return Collections.EMPTY_LIST;
+
+    private List<String> columnNamesList(Table table) {
+        if (table == null)return Collections.emptyList();
         Column[] tab = table.getColumns();
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>(tab.length);
         for (int i = 0; i < tab.length; i++)
             list.add(tab[i].getName());
+
         return list;
     }
-    
+
     public DifferenceResult getSubDifferences(String element) {
         Column c1 = table1 != null ? table1.getColumn(element) : null;
         Column c2 = table2 != null ? table2.getColumn(element) : null;

@@ -6,10 +6,12 @@
 package dbmanager.tree;
 
 import java.util.Enumeration;
+import java.util.Set;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 
 import dbmanager.tools.DifferenceResult;
 
@@ -17,29 +19,43 @@ import dbmanager.tools.DifferenceResult;
  *
  * @author Matteo Piccinini
  */
-public class DifferenceTreeComposer {
+public class DifferenceTreeComposer{
 
     public DifferenceTreeComposer(){
         root = new DefaultMutableTreeNode("Database");
     }
-    
+
     public void setDifferences(DifferenceResult result){
-        setDifferences(root, result);
+        setDifferences(root, null, result);
     }
-    
-    public void setDifferences(DefaultMutableTreeNode whereAppend, DifferenceResult result){
-        Enumeration enums = result.elements();
+
+    public void setDifferences(DefaultMutableTreeNode whereAppend, String key, DifferenceResult result){
+        Enumeration<String> enums = result.elements();
         while (enums.hasMoreElements()){
-            String tableName = (String)enums.nextElement();
-            int diffType = result.getDiffType(tableName);
-            DifferenceTreeNode node = generateNode(diffType, tableName);
+            String differenceKey = (String)enums.nextElement();
+            int diffType = result.getDiffType(differenceKey);
+            DifferenceTreeNode node = generateNode(diffType, differenceKey);
+            node.setDifferenceKey(key);
             whereAppend.add(node);
-            
-            DifferenceResult sub = result.getSubDifferences(tableName); 
+
+            DifferenceResult sub = result.getSubDifferences(differenceKey); 
             if(sub != null)
-                setDifferences(node, sub);
+                setDifferences(node, null, sub);
         }
+    	Set<String> keys = result.getSubKeys();
+    	for(String subKey : keys){
+    		DifferenceResult sub = result.getSubDifferences(subKey);
+    		setDifferences(whereAppend, subKey, sub);
+    	}
     }
+
+//    private void traverse(DifferenceResult result){
+//    	Set<String> keys = result.getSubKeys();
+//    	for(String key : keys){
+//    		DifferenceResult sub = result.getSubDifferences(key);
+//    	}
+//    		
+//    }
 
     public TreeModel getModel(){
         return new DefaultTreeModel(root);

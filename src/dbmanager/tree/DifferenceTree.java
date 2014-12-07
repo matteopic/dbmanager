@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
+import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 
 import dbmanager.core.DatabaseProperties;
@@ -45,7 +46,6 @@ public class DifferenceTree extends JFrame {
 	private void initGUI(DatabaseProperties prop1, DatabaseProperties prop2) {
 		// pack();
 		// setLocationRelativeTo(null);
-
 		buttonExpand = new JButton("Espandi");
 		buttonCollapse = new JButton("Comprimi");
 		JToolBar toolbar = new JToolBar();

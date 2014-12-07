@@ -34,6 +34,7 @@ public class TablesDifferences extends AbstractDifferences {
         return list;
     }
 
+
     public DifferenceResult getSubDifferences(String element) {
         Table t1 = prop1.findTable(element);
         Table t2 = prop2.findTable(element);

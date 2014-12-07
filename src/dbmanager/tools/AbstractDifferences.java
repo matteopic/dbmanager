@@ -13,7 +13,7 @@ import java.util.List;
  */
 public abstract class AbstractDifferences extends DifferenceResult{
 
-    protected void processDiffs(List list1, List list2) {
+    protected void processDiffs(List<String> list1, List<String> list2) {
         String elementName;
         for (int i = 0; i < list1.size(); i++) {
             elementName = (String) list1.get(i);

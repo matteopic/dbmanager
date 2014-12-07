@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -88,7 +89,7 @@ public class DifferenceResult {
 	}
 
 	public String toString() {
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		Iterator<String> iter = leftNotHave.iterator();
 		while (iter.hasNext()) {
 			sb.append("<<< ").append(iter.next());
@@ -109,6 +110,10 @@ public class DifferenceResult {
 
 	public boolean existsDifferences() {
 		return (leftNotHave.size() > 0 || rightNotHave.size() > 0);
+	}
+
+	public Set<String> getSubKeys(){
+		return subs.keySet();
 	}
 
 	public DifferenceResult getSubDifferences(String element) {
