@@ -32,7 +32,6 @@ public class DifferenceTree extends JFrame {
 	public DifferenceTree(final DatabaseProperties prop1,
 			final DatabaseProperties prop2) {
 		super("Databases Differences");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JLabel label = new JLabel("Processing...");
 		getContentPane().add(label);
 
@@ -108,6 +107,7 @@ public class DifferenceTree extends JFrame {
 			conn2.close();
 
 			DifferenceTree dt = new DifferenceTree(prop1, prop2);
+			dt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			dt.setVisible(true);
 
 		} catch (Exception e) {
