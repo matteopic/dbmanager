@@ -16,8 +16,8 @@ public class SQLCellRenderer extends DefaultListCellRenderer{//JLabel implements
     private static final long serialVersionUID = -523762490307261956L;
     final static ImageIcon stringFunctionIcon = new ImageIcon("img/sf.gif");
      final static ImageIcon numericFunctionIcon = new ImageIcon("img/nf.gif");
-     final static ImageIcon tableIcon = new ImageIcon("img/table.gif");
-     final static ImageIcon columnIcon = new ImageIcon("img/column.gif");
+     final static ImageIcon tableIcon = new ImageIcon("img/table.png");
+     final static ImageIcon columnIcon = new ImageIcon("img/column.png");
      final static ImageIcon keywordIcon = new ImageIcon("img/keyword.gif");
      final static Color selected = new Color(79,137,255);
 
@@ -42,19 +42,6 @@ public class SQLCellRenderer extends DefaultListCellRenderer{//JLabel implements
 		label.setIcon(getIcon(s));
 		label.setFont(list.getFont().deriveFont(Font.PLAIN));
 		return label;
-
-/*   	   if (isSelected) {
-           setBackground(selected);
-	       setForeground(list.getSelectionForeground());
-	   }
-         else {
-	       setBackground(list.getBackground());
-	       setForeground(list.getForeground());
-	   }
-	   setEnabled(list.isEnabled());
-
-         setOpaque(true);
-         return this;*/
      }
 
 	public Icon getIcon(String value){
