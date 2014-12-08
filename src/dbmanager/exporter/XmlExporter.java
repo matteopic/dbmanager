@@ -1,16 +1,21 @@
 package dbmanager.exporter;
 
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.swing.table.TableModel;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
-
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
 
 public class XmlExporter{
 	public XmlExporter(){}
@@ -45,17 +50,23 @@ public class XmlExporter{
 				records.appendChild(element);
 			}
 
-			FileOutputStream out = new FileOutputStream(fileToSave);
-
-			OutputFormat outputFormat = new OutputFormat(doc);
-			outputFormat.setEncoding("UTF-8");
-			outputFormat.setIndent(4);
-            outputFormat.setIndenting(true);
-
-			XMLSerializer xmlser = new XMLSerializer(out, outputFormat);
-			xmlser.serialize(doc);
-
-			out.flush();
-			out.close();
+			save(doc, new File(fileToSave));
 	}
+
+    private void save(Document doc, File writeTo) throws IOException, TransformerException{
+		FileOutputStream out = new FileOutputStream(writeTo);
+
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
+        DOMSource source = new DOMSource(doc);
+        StreamResult result =  new StreamResult(out);
+        transformer.transform(source, result);
+
+		out.flush();
+		out.close();    	
+    }
 }
