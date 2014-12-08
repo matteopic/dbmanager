@@ -35,7 +35,6 @@ import javax.swing.SwingUtilities;
 import dbmanager.chooser.SalvaFile;
 import dbmanager.core.DatabaseProperties;
 import dbmanager.core.Table;
-import dbmanager.gui.BottomPane;
 import dbmanager.gui.ConnectionPane;
 import dbmanager.gui.InfoDb;
 import dbmanager.gui.StylesheetChooser;
@@ -83,15 +82,7 @@ public class Master extends JFrame {
 
 		Component cpane = new ConnectionPane();
 //		connections.addTab("Conn 1", cpane);
-		connections.addTab(null, null);
-		JButton addNewTab = new JButton("+");
-		addNewTab.setBorder(null);
-		connections.setTabComponentAt(0, addNewTab);
-		addNewTab.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addNewConnectionTab();
-			}
-		});
+		addNewPaneButton();
 		addNewConnectionTab();
 
 		getContentPane().add(
@@ -162,6 +153,20 @@ public class Master extends JFrame {
 		jTextArea1.setLineWrap(true);
 
 		initMenu();
+	}
+
+	private void addNewPaneButton(){
+		JButton addNewTab = new JButton("+");
+		addNewTab.setBorder(null);
+		addNewTab.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addNewConnectionTab();
+			}
+		});
+
+		assert connections.getTabCount() == 0;
+		connections.addTab(null, null);
+		connections.setTabComponentAt(0, addNewTab);
 	}
 
 
