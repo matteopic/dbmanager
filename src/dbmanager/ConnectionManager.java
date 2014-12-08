@@ -25,13 +25,23 @@ public class ConnectionManager {
     public Connection openConnection()throws SQLException{
 		try{
 			Class.forName(driver);
-    	    return DriverManager.getConnection(url, username, password);
+    	    conn = DriverManager.getConnection(url, username, password);
+    	    return conn;
         }catch(ClassNotFoundException e){
         	SQLException ex = new SQLException("Driver not found: " + driver);
         	ex.initCause(e);
         	throw ex;
         }
         //return null;
+    }
+
+    public boolean isConnected(){
+    	try {
+			return conn != null && !conn.isClosed();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
     }
 
     public void closeConnection(Connection conn){
@@ -43,8 +53,18 @@ public class ConnectionManager {
         }catch(Exception e){}
     }
 
+    public Connection getConnection(){
+    	return conn;
+    }
+
+	public void closeCurrentConnection() {
+		closeConnection(conn);
+	}
+
+    private Connection conn;
     private String username;
     private String password;
     private String url;
     private String driver;
+
 }
