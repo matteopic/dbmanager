@@ -1,0 +1,2 @@
+mvn install:install-file -Dfile=lib/jcommon-0.9.7.jar -DgroupId=jfree -DartifactId=jcommon -Dversion=0.9.7 -Dpackaging=jar
+mvn install:install-file -Dfile=lib/jfreereport-0.8.4_11-all.jar -DgroupId=jfree -DartifactId=jfreereport -Dversion=0.8.4_11-all -Dpackaging=jar
