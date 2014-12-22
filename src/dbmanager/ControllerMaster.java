@@ -20,11 +20,17 @@ import dbmanager.exporter.XmlExporter;
 import dbmanager.gui.ChangeConnectionPaneListener;
 import dbmanager.gui.DBMetaTableModel;
 import dbmanager.gui.ResultSetTableModel;
+import dbmanager.plugins.MySQLResources;
+import dbmanager.plugins.Plugin;
 import dbmanager.report.DatabasePropertiesTableModel;
 import dbmanager.report.Report;
 import dbmanager.table.TabellaResultSet;
 
 public class ControllerMaster {
+
+	private Plugin[] plugins = new Plugin[]{
+			new MySQLResources()
+	};
 
 	public ControllerMaster(Master master) {
 		this.master = master;
@@ -36,6 +42,7 @@ public class ControllerMaster {
 
 		connections = new ArrayList<ConnectionManager>();
 		connections.add( new ConnectionManager() );
+		master.setPlugins(plugins);
 		switchToConnection(0);
 	}
 
@@ -46,6 +53,13 @@ public class ControllerMaster {
 		master.setUrl(cm.getUrl());
 		master.setUsername(cm.getUsername());
 		master.setPassword(cm.getPassword());
+		notifyPlugins(cm.getConnection());
+	}
+
+	private void notifyPlugins(Connection connection) {
+		for (Plugin plugin : plugins) {
+			plugin.setCurrentConnection( connection );
+		}
 	}
 
 	public void addNewConnection() {
@@ -73,6 +87,7 @@ public class ControllerMaster {
 						dbMeta.getStringFunctions(), prop.getSupportedTypes());
 				master.setQuery("SELECT * FROM ");
 				master.setConnesso(true);
+				notifyPlugins(conn);
 			} else
 				master.setConnesso(false);
 		} catch (Exception e) {
@@ -162,6 +177,7 @@ public class ControllerMaster {
 	public void disconnetti() {
 		cm.closeCurrentConnection();
 		master.setConnesso(false);
+		notifyPlugins(null);
 	}
 
 	public void esportaXml(TableModel dati, java.io.File file) {

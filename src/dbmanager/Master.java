@@ -11,8 +11,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -27,6 +25,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPasswordField;
+import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -44,6 +43,7 @@ import dbmanager.gui.ChangeConnectionPaneListener;
 import dbmanager.gui.ConnectionPane;
 import dbmanager.gui.InfoDb;
 import dbmanager.gui.StylesheetChooser;
+import dbmanager.plugins.Plugin;
 import dbmanager.tree.DifferenceTree;
 
 public class Master extends JFrame {
@@ -273,6 +273,14 @@ public class Master extends JFrame {
 				exit(e);
 			}
 		});
+	}
+
+	public void setPlugins(Plugin...plugins){
+		pulsantiToolBar.add(new JSeparator());
+		for (Plugin plugin : plugins) {
+			Component cmp = plugin.getToolbarComponent();
+			pulsantiToolBar.add(cmp);
+		}
 	}
 
 	private void initMenu() {
