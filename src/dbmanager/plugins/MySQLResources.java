@@ -76,11 +76,43 @@ public class MySQLResources implements Plugin {
 			rs = stmt.executeQuery("SHOW GLOBAL STATUS");
 			fillMap(data, rs);
 			rs.close();
+
+			rs = stmt.executeQuery("/*!50000 SELECT 'myisam_indexes', IFNULL(SUM(INDEX_LENGTH),0) FROM information_schema.TABLES WHERE ENGINE='MyISAM' */");
+			fillMap(data, rs);
+			rs.close();			
+
+			initThreadsCreatedStats(stmt, data);			
+			
+			
+			
+			
+			
 			stmt.close();
 			process(data);
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
+	}
+	
+	private void initThreadsCreatedStats(Statement stmt, Map<String,Object>data) throws SQLException{
+		try{
+			String sql = "SHOW /*!50000 GLOBAL */ STATUS WHERE Variable_name LIKE 'Threads_created'";
+			
+			ResultSet rs = stmt.executeQuery(sql);
+			rs.next();
+			String threads_created1 = rs.getString(2);
+			rs.close();
+
+			Thread.sleep(1000);
+
+			rs = stmt.executeQuery(sql);
+			rs.next();
+			String threads_created2 = rs.getString(2);
+			rs.close();				
+
+			data.put("threads_created1", threads_created1);
+			data.put("threads_created2", threads_created2);
+		}catch(InterruptedException e){}
 	}
 
 	private void fillMap(Map<String, Object>data, ResultSet rs) throws SQLException{
@@ -100,9 +132,9 @@ public class MySQLResources implements Plugin {
 		int minor = Integer.parseInt(versionTokens[1]);
 		boolean EOL = false;
 		if(major < 5 || (major == 5 && minor < 5))EOL = true;
-	
+
 		FreemarkerReport fmr  = new FreemarkerReport();
-		fmr.showReport(data, "mysql-resources.ftl");
+		fmr.showReport(data, "mysql-resources.ftl", "MySQL performance tuning primer");
 		
 	}
 
