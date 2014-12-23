@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
@@ -32,6 +33,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -49,14 +51,15 @@ import dbmanager.tree.DifferenceTree;
 public class Master extends JFrame {
 
 	private static final long serialVersionUID = 7221774008650756104L;
+	private Plugin[] plugins;
 
 	public Master() {
+		setTitle("DbManager");
+		setIconImage(new ImageIcon("img/kexi.png").getImage());
+		initGUI();
 		controller = new ControllerMaster(this);
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				setTitle("DbManager");
-				setIconImage(new ImageIcon("img/kexi.png").getImage());
-				initGUI();
 				pack();
 				// setSize(new java.awt.Dimension(600, 300));
 				setLocationRelativeTo(null);
@@ -93,15 +96,14 @@ public class Master extends JFrame {
 		getContentPane().add(
 				connections,
 				new GridBagConstraints(0, 3, 1, 1, 1.0, 1.0,
-						GridBagConstraints.CENTER,
-						GridBagConstraints.BOTH, new java.awt.Insets(
-								0, 0, 0, 0), 390, 215));
+						GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+						new java.awt.Insets(0, 0, 0, 0), 390, 215));
 		getContentPane().add(
 				pulsantiToolBar,
 				new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
 						GridBagConstraints.CENTER,
-						GridBagConstraints.HORIZONTAL,
-						new java.awt.Insets(0, 0, 0, 0), 0, 0));
+						GridBagConstraints.HORIZONTAL, new java.awt.Insets(0,
+								0, 0, 0), 0, 0));
 
 		initConnectionBar();
 
@@ -110,13 +112,11 @@ public class Master extends JFrame {
 
 		// sql.setPreferredSize(new java.awt.Dimension(640,640));
 
-		
 		driverText.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cambiaUrl(e);
 			}
 		});
-
 
 		jTextArea1.setText("");
 		// jTextArea1.setBounds(new java.awt.Rectangle(555,69,53,16));
@@ -128,79 +128,87 @@ public class Master extends JFrame {
 	public void addChangeConnectionPaneListener(
 			final ChangeConnectionPaneListener changeConnectionPaneListener) {
 
-		connections. addChangeListener(new ChangeListener() {
+		connections.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 
-				JTabbedPane tabs = (JTabbedPane)e.getSource();
+				JTabbedPane tabs = (JTabbedPane) e.getSource();
 				int index = tabs.getSelectedIndex();
 				int count = tabs.getTabCount();
 
 				// Last pane is new tab button, not a connection pane
 				count--;
 
-				if(index < count)
+				if (index < count)
 					changeConnectionPaneListener.paneChanging(index);
 			}
 		});
 
 	}
 
-	private void initConnectionBar(){
+	private void initConnectionBar() {
 		getContentPane().add(
 				connessioneBar,
 				new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
 						GridBagConstraints.CENTER,
-						GridBagConstraints.HORIZONTAL,
-						new Insets(0, 0, 0, 0), 0, 0));
+						GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0),
+						0, 0));
 
 		connessioneBar.setFloatable(false);
 		connessioneBar.setLayout(new java.awt.GridBagLayout());
-		connessioneBar.add(lblUrl, new GridBagConstraints(2, 0, 1, 1,
-				0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new java.awt.Insets(0, 5, 0,
-						5), 0, 0));
-		connessioneBar.add(urlText, new GridBagConstraints(3, 0, 1, 1,
-				2.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new java.awt.Insets(5,
-						5, 5, 5), 0, 0));
-		connessioneBar.add(lblUsername, new GridBagConstraints(0, 1,
-				1, 1, 0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new java.awt.Insets(0,
-						5, 0, 5), 0, 0));
-		connessioneBar.add(usernameText, new GridBagConstraints(1, 1,
-				1, 1, 1.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new java.awt.Insets(0,
-						5, 0, 5), 0, 0));
-		connessioneBar.add(lblPassword, new GridBagConstraints(2, 1,
-				1, 1, 0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new java.awt.Insets(0,
-						5, 0, 5), 0, 0));
-		connessioneBar.add(passwordText, new GridBagConstraints(3, 1,
-				1, 1, 1.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new java.awt.Insets(0,
-						5, 0, 5), 0, 0));
-		connessioneBar.add(lblDriver, new GridBagConstraints(0, 0, 1,
-				1, 0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new java.awt.Insets(0,
-						5, 0, 5), 0, 0));
-		connessioneBar.add(driverText, new GridBagConstraints(1, 0, 1,
-				1, 0.0, 0.0, GridBagConstraints.WEST,
-				GridBagConstraints.HORIZONTAL, new java.awt.Insets(0,
-						5, 0, 5), 0, 0));
+		connessioneBar.add(lblUrl, new GridBagConstraints(2, 0, 1, 1, 0.0, 0.0,
+				GridBagConstraints.WEST, GridBagConstraints.NONE,
+				new java.awt.Insets(0, 5, 0, 5), 0, 0));
+		connessioneBar.add(urlText, new GridBagConstraints(3, 0, 1, 1, 2.0,
+				0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new java.awt.Insets(5, 5, 5, 5), 0, 0));
+		connessioneBar.add(lblUsername, new GridBagConstraints(0, 1, 1, 1, 0.0,
+				0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new java.awt.Insets(0, 5, 0, 5), 0, 0));
+		connessioneBar.add(usernameText, new GridBagConstraints(1, 1, 1, 1,
+				1.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.HORIZONTAL, new java.awt.Insets(0, 5, 0, 5),
+				0, 0));
+		connessioneBar.add(lblPassword, new GridBagConstraints(2, 1, 1, 1, 0.0,
+				0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new java.awt.Insets(0, 5, 0, 5), 0, 0));
+		connessioneBar.add(passwordText, new GridBagConstraints(3, 1, 1, 1,
+				1.0, 0.0, GridBagConstraints.WEST,
+				GridBagConstraints.HORIZONTAL, new java.awt.Insets(0, 5, 0, 5),
+				0, 0));
+		connessioneBar.add(lblDriver, new GridBagConstraints(0, 0, 1, 1, 0.0,
+				0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new java.awt.Insets(0, 5, 0, 5), 0, 0));
+		connessioneBar.add(driverText, new GridBagConstraints(1, 0, 1, 1, 0.0,
+				0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL,
+				new java.awt.Insets(0, 5, 0, 5), 0, 0));
 	}
 
-	private void initNewPaneButton(){
-		JButton addNewTab = new JButton("+");
-		addNewTab.setBorder(null);
-		addNewTab.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				getController().addNewConnection();
-			}
-		});
+	private void initNewPaneButton() {
+		// JButton addNewTab = new JButton("+");
+		// addNewTab.setBorder(null);
+		// addNewTab.addActionListener(new ActionListener() {
+		// public void actionPerformed(ActionEvent e) {
+		// getController().addNewConnection();
+		// }
+		// });
 
 		assert connections.getTabCount() == 0;
-		connections.addTab(null, null);
-		connections.setTabComponentAt(0, addNewTab);
+		connections.addTab("+", null);
+		// connections.setTabComponentAt(0, addNewTab);
+		connections.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if(!isVisible())return;
+
+				JTabbedPane tabs = (JTabbedPane) e.getSource();
+				int index = tabs.getSelectedIndex();
+				int count = tabs.getTabCount();
+				if (index == count - 1) {
+					connections.removeChangeListener(this);
+					getController().addNewConnection();
+					connections.addChangeListener(this);
+				}
+			}
+		});
 	}
 
 	private void initToolbar() {
@@ -212,6 +220,11 @@ public class Master extends JFrame {
 		pulsantiToolBar.add(esportaStruttura);
 		pulsantiToolBar.add(reportStruttura);
 		pulsantiToolBar.add(infoDB);
+		pulsantiToolBar.add(new JSeparator(SwingConstants.VERTICAL));
+
+		pluginsControls.setOpaque(false);
+		pulsantiToolBar.add(pluginsControls);
+		refreshPluginsControls();
 
 		AbstractAction eseguiListener = new AbstractAction("Esegui") {
 			private static final long serialVersionUID = -1735780551247244550L;
@@ -221,9 +234,12 @@ public class Master extends JFrame {
 			}
 		};
 
-		KeyStroke ksEsegui = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.CTRL_MASK);
-		esegui.getActionMap().put(eseguiListener.getValue(Action.NAME), eseguiListener);
-		esegui.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ksEsegui, eseguiListener.getValue(Action.NAME));
+		KeyStroke ksEsegui = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,
+				InputEvent.CTRL_MASK);
+		esegui.getActionMap().put(eseguiListener.getValue(Action.NAME),
+				eseguiListener);
+		esegui.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ksEsegui,
+				eseguiListener.getValue(Action.NAME));
 		esegui.addActionListener(eseguiListener);
 
 		connesso.addActionListener(new ActionListener() {
@@ -275,11 +291,19 @@ public class Master extends JFrame {
 		});
 	}
 
-	public void setPlugins(Plugin...plugins){
-		pulsantiToolBar.add(new JSeparator());
+	public void setPlugins(Plugin... plugins) {
+		this.plugins = plugins;
+		refreshPluginsControls();
+	}
+
+	private void refreshPluginsControls() {
+		pluginsControls.removeAll();
+		if (plugins == null)
+			return;
+
 		for (Plugin plugin : plugins) {
 			Component cmp = plugin.getToolbarComponent();
-			pulsantiToolBar.add(cmp);
+			pluginsControls.add(cmp);
 		}
 	}
 
@@ -385,18 +409,18 @@ public class Master extends JFrame {
 		connections.insertTab(title, null, cpane, null, count);
 		connections.setSelectedIndex(count);
 
-//		ControllerMaster cm = new ControllerMaster(this);
-//		controllers.add(cm);
+		// ControllerMaster cm = new ControllerMaster(this);
+		// controllers.add(cm);
 	}
 
-	private ConnectionPane getConnectionPane(){
-		return (ConnectionPane)connections.getSelectedComponent();
+	private ConnectionPane getConnectionPane() {
+		return (ConnectionPane) connections.getSelectedComponent();
 	}
 
-	private ControllerMaster getController(){
+	private ControllerMaster getController() {
 		return controller;
-//		int index = connections.getSelectedIndex();
-//		return controllers.get(index);
+		// int index = connections.getSelectedIndex();
+		// return controllers.get(index);
 	}
 
 	public void infoDB(ActionEvent e) {
@@ -407,20 +431,23 @@ public class Master extends JFrame {
 		infodb.setVisible(true);
 	}
 
-	public void openCompareWindow(DatabaseProperties prop1, DatabaseProperties prop2) {
+	public void openCompareWindow(DatabaseProperties prop1,
+			DatabaseProperties prop2) {
 		DifferenceTree dTree = new DifferenceTree(prop1, prop2);
 		dTree.setVisible(true);
 
-//		try {
-//			if(controllers.size() >= 2){
-//				DatabaseProperties prop1 = controllers.get(0).getDatabaseProperties();
-//				DatabaseProperties prop2 = controllers.get(1).getDatabaseProperties();
-//				DifferenceTree dTree = new DifferenceTree(prop1, prop2);
-//				dTree.setVisible(true);
-//			}
-//		} catch (Exception ex) {
-//			ex.printStackTrace();
-//		}
+		// try {
+		// if(controllers.size() >= 2){
+		// DatabaseProperties prop1 =
+		// controllers.get(0).getDatabaseProperties();
+		// DatabaseProperties prop2 =
+		// controllers.get(1).getDatabaseProperties();
+		// DifferenceTree dTree = new DifferenceTree(prop1, prop2);
+		// dTree.setVisible(true);
+		// }
+		// } catch (Exception ex) {
+		// ex.printStackTrace();
+		// }
 	}
 
 	public void reportStruttura(ActionEvent e) {
@@ -473,7 +500,6 @@ public class Master extends JFrame {
 		controller.shutdown();
 	}
 
-
 	public void appendMessage(String message) {
 		getConnectionPane().appendMessage(message);
 	}
@@ -497,20 +523,17 @@ public class Master extends JFrame {
 		getConnectionPane().setTabelle(tabelle);
 	}
 
-	private String[] urls = new String[] { 
+	private String[] urls = new String[] {
 			"jdbc:mysql://[HOST][:PORT]/dbname[?param=value[&param2=value2]]",
-			"jdbc:derby:jaco;create=true",
-			"jdbc:odbc:[NOME ODBC]",
+			"jdbc:derby:jaco;create=true", "jdbc:odbc:[NOME ODBC]",
 			"jdbc:oracle:oci8:@[SID]",
 			"jdbc:microsoft:sqlserver://[HOST]:[PORT][;DatabaseName=[DB]]",
 			"jdbc:hsqldb:[file]",
 			"jdbc:postgresql://[HOST]:[PORT][?DatabaseName=[DB]]" };
 
-	private String[] drivers = new String[] {
-			"com.mysql.jdbc.Driver",
+	private String[] drivers = new String[] { "com.mysql.jdbc.Driver",
 			"org.apache.derby.jdbc.EmbeddedDriver",
-			"sun.jdbc.odbc.JdbcOdbcDriver", 
-			"oracle.jdbc.driver.OracleDriver",
+			"sun.jdbc.odbc.JdbcOdbcDriver", "oracle.jdbc.driver.OracleDriver",
 			"com.microsoft.jdbc.sqlserver.SQLServerDriver",
 			"org.hsqldb.jdbcDriver", "org.postgresql.Driver" };
 
@@ -538,7 +561,9 @@ public class Master extends JFrame {
 	private JComboBox<String> driverText = new JComboBox<String>();
 	// private JScrollPane jScrollPane2 = new JScrollPane();
 	private JTextArea jTextArea1 = new JTextArea();
-//	private BottomPane bottomPane;
+	// private BottomPane bottomPane;
 	private JTabbedPane connections = new JTabbedPane();
-//	private List<ControllerMaster> controllers = new ArrayList<ControllerMaster>();
+	private JPanel pluginsControls = new JPanel();
+	// private List<ControllerMaster> controllers = new
+	// ArrayList<ControllerMaster>();
 }
