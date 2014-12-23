@@ -8,8 +8,10 @@ import java.io.Writer;
 import java.net.URL;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -34,7 +36,7 @@ public class FreemarkerReport {
 		}
 	}
 
-	public void showReport(Map<?, ?> dataModel, String template) {
+	public void showReport(Map<?, ?> dataModel, String template, String windowTitle) {
 		try {
 			Template temp = cfg.getTemplate(template);
 
@@ -63,11 +65,12 @@ public class FreemarkerReport {
 //			BrowserCanvas browser = new BrowserCanvas(da.getRoot(), da, baseUrl);
 //			browser.createLayout(new java.awt.Dimension(1000, 600));
 			// Create frame with a specific size.
-			JFrame frame = new JFrame();
+			JFrame frame = new JFrame(windowTitle);
+			frame.setIconImage(new ImageIcon("img/kexi.png").getImage());
 			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			frame.setSize(600, 400);
 //			frame.setContentPane(browser);
-			frame.getContentPane().add(jep);
+			frame.getContentPane().add(new JScrollPane(jep));
 			frame.setVisible(true);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
