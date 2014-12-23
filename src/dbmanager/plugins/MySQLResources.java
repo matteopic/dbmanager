@@ -77,6 +77,10 @@ public class MySQLResources implements Plugin {
 			fillMap(data, rs);
 			rs.close();
 
+			rs = stmt.executeQuery("/*!50000 SELECT 'myisam_indexes', IFNULL(SUM(INDEX_LENGTH),0) FROM information_schema.TABLES WHERE ENGINE='MyISAM' */");
+			fillMap(data, rs);
+			rs.close();			
+
 			initThreadsCreatedStats(stmt, data);			
 			
 			
@@ -90,10 +94,9 @@ public class MySQLResources implements Plugin {
 		}
 	}
 	
-
 	private void initThreadsCreatedStats(Statement stmt, Map<String,Object>data) throws SQLException{
 		try{
-			String sql = "SHOW GLOBAL STATUS WHERE Variable_name LIKE 'Threads_created'";
+			String sql = "SHOW /*!50000 GLOBAL */ STATUS WHERE Variable_name LIKE 'Threads_created'";
 			
 			ResultSet rs = stmt.executeQuery(sql);
 			rs.next();

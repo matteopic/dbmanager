@@ -173,10 +173,93 @@
 				<span class="success">Your thread_cache_size is fine</span><br/>
 			</#if>
 
+			<h2>Key Buffer</h2>
+			<#assign key_read_requests=(Key_read_requests?number?long)/>
+			<#assign key_reads=(Key_reads?number?long)/>
+			<#assign key_blocks_unused=(Key_blocks_unused?number?long)/>
+			<#assign key_cache_block_size=(key_cache_block_size?number?long)/>
+			<#assign key_buffer_size=(key_buffer_size?number?long) />
+			<#if key_reads = 0>
+				<span class="danger">
+					No key reads?!<br/>
+					Seriously look into using some indexes
+					<#assign key_cache_miss_rate=0/>
+					<#assign key_buffer_free=(key_blocks_unused * key_cache_block_size / key_buffer_size * 100)/>
+					<#assign key_buffer_freeRND=(key_buffer_free / 1)/>
+				</span>
+			<#else>
+				<#assign key_cache_miss_rate=(key_read_requests / key_reads)/>
+				<#assign key_buffer_free=(key_blocks_unused * key_cache_block_size / key_buffer_size * 100)/>
+				<#assign key_buffer_freeRND=(key_buffer_free / 1)/>
+				<!--
+				if [ ! -z $key_blocks_unused ] ; then
+					key_buffer_free=$(echo "$key_blocks_unused * $key_cache_block_size / $key_buffer_size * 100" | bc -l )
+                	key_buffer_freeRND=$(echo "scale=0; $key_buffer_free / 1" | bc -l)
+                else
+                        key_buffer_free='Unknown'
+                        key_buffer_freeRND=75
+                fi
+                -->
+			</#if>
+
+			<#if myisam_indexes??>
+			Current MyISAM index space = <@humanReadableSize size=myisam_indexes /><br/>
+			</#if>
+			Current key_buffer_size = <@humanReadableSize size=key_buffer_size /><br/>
+			Key cache miss rate is 1:${key_cache_miss_rate}<br/>
+			Key buffer free ratio = ${key_buffer_freeRND} %<br/> 
+
+
+			<#if major_version = "5.1" && mysql_version_num lt 050123>
+				<#if key_buffer_size gte 4294967296 && version_compile_machine?matches("x86_64|ppc64|ia64|sparc64|i686")>
+					<span class="danger">
+						Using key_buffer_size > 4GB will cause instability in versions prior to 5.1.23<br/> 
+						See Bug#5731, Bug#29419, Bug#29446
+					</span>
+				</#if>
+			<#elseif major_version="5.0" && mysql_version_num lt 050052>
+				<#if key_buffer_size gte 4294967296 && version_compile_machine?matches("x86_64|ppc64|ia64|sparc64|i686")>
+					<span class="danger">
+						Using key_buffer_size > 4GB will cause instability in versions prior to 5.0.52<br/> 
+						See Bug#5731, Bug#29419, Bug#29446
+					</span>
+				</#if>
+			<#elseif (major_version="4.1" || major_version="4.0")>
+				<#if key_buffer_size gte 4294967296 && version_compile_machine?matches("x86_64|ppc64|ia64|sparc64|i686")>
+					<span class="danger">
+						Using key_buffer_size > 4GB will cause instability in versions prior to 5.0.52<br/>
+						Reduce key_buffer_size to a safe value
+						See Bug#5731, Bug#29419, Bug#29446
+					</span>
+				</#if>
+			</#if>
+
+			<br/>
+
+			<#if key_cache_miss_rate lte 100 && key_cache_miss_rate gt 0 && key_buffer_freeRND lte 20>
+				<span class="danger">
+					You could increase key_buffer_size<br/>
+					It is safe to raise this up to 1/4 of total system memory;
+					assuming this is a dedicated database server.
+				</span>
+			<#elseif key_buffer_freeRND lte 20 && key_buffer_size lte myisam_indexes>
+				<span class="danger">
+					You could increase key_buffer_size<br/>
+					It is safe to raise this up to 1/4 of total system memory;
+					assuming this is a dedicated database server.
+				</span>
+			<#elseif key_cache_miss_rate gte 10000 || key_buffer_freeRND lte 50>
+				<span class="danger">
+					Your key_buffer_size seems to be too high. 
+					Perhaps you can use these resources elsewhere
+				</span>
+			<#else>
+				<span class="success">Your key_buffer_size seems to be fine</span>
+			</#if>
 
 			<h2>Memory Usage</h2>
 <#assign max_memory_usage = (
-	key_buffer_size?number?long
+	key_buffer_size
 	+ query_cache_size?number?long
 	+ tmp_table_size?number?long
 	+ innodb_buffer_pool_size?number?long
