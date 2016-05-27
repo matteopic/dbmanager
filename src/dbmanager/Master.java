@@ -529,13 +529,15 @@ public class Master extends JFrame {
 			"jdbc:oracle:oci8:@[SID]",
 			"jdbc:microsoft:sqlserver://[HOST]:[PORT][;DatabaseName=[DB]]",
 			"jdbc:hsqldb:[file]",
-			"jdbc:postgresql://[HOST]:[PORT][?DatabaseName=[DB]]" };
+			"jdbc:postgresql://[HOST]:[PORT][?DatabaseName=[DB]]",
+			"jdbc:sqlite:[FILE]"
+	};
 
 	private String[] drivers = new String[] { "com.mysql.jdbc.Driver",
 			"org.apache.derby.jdbc.EmbeddedDriver",
 			"sun.jdbc.odbc.JdbcOdbcDriver", "oracle.jdbc.driver.OracleDriver",
 			"com.microsoft.jdbc.sqlserver.SQLServerDriver",
-			"org.hsqldb.jdbcDriver", "org.postgresql.Driver" };
+			"org.hsqldb.jdbcDriver", "org.postgresql.Driver","org.sqlite.JDBC" };
 
 	private JToolBar pulsantiToolBar = new JToolBar();
 	private JLabel lblDriver = new JLabel();
