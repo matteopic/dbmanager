@@ -51,19 +51,19 @@ public class SQLStyledDocument extends DefaultStyledDocument{
 
 
 		kas = new SimpleAttributeSet();
-		kas.addAttribute(StyleConstants.FontConstants.Bold, new Boolean(true));
+		kas.addAttribute(StyleConstants.FontConstants.Bold, false);
 		kas.addAttribute(StyleConstants.ColorConstants.Foreground, Color.BLUE);
 
 		nas = new SimpleAttributeSet();
-		nas.addAttribute(StyleConstants.FontConstants.Bold, new Boolean(true));
+		nas.addAttribute(StyleConstants.FontConstants.Bold, false);
 		nas.addAttribute(StyleConstants.ColorConstants.Foreground, new Color(0,128,0));
 
 		fas = new SimpleAttributeSet();
-		fas.addAttribute(StyleConstants.FontConstants.Bold, new Boolean(true));
+		fas.addAttribute(StyleConstants.FontConstants.Bold, false);
 		fas.addAttribute(StyleConstants.ColorConstants.Foreground, new Color(128,0,128));
 
 		type = new SimpleAttributeSet();
-		type.addAttribute(StyleConstants.FontConstants.Bold, new Boolean(true));
+		type.addAttribute(StyleConstants.FontConstants.Bold, false);
 		type.addAttribute(StyleConstants.ColorConstants.Foreground, Color.ORANGE);
 
 		commento = new SimpleAttributeSet();
