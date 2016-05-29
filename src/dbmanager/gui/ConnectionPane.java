@@ -2,24 +2,41 @@ package dbmanager.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.util.Collection;
 import java.util.StringTokenizer;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
+import javax.swing.JTree;
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
 import dbmanager.autocompletion.SqlCompletionModel;
 import dbmanager.autocompletion.TextPaneAutoCompletion;
+import dbmanager.core.DatabaseProperties;
 import dbmanager.core.Table;
+import dbmanager.core.Type;
+import dbmanager.tree.AdvancedTree;
+import dbmanager.tree.DBTreeCellRenderer;
+import dbmanager.tree.DBTreeModel;
 
 public class ConnectionPane extends JPanel {
 
+	private static final long serialVersionUID = 3691940753596588015L;
 	public ConnectionPane(){
 		setLayout(new BorderLayout());
 		JSplitPane split = new JSplitPane();
+		
+		model = new SqlCompletionModel();
 
-		sql = new TextPaneAutoCompletion(null);
+		sql = new TextPaneAutoCompletion(model);
+		sql.setFont(Font.getFont(Font.MONOSPACED));
 		sql.setText("");
 
 		JScrollPane scroll = new JScrollPane(sql,
@@ -29,14 +46,20 @@ public class ConnectionPane extends JPanel {
 		scroll.setRowHeaderView(numeroRighe);
 
 		split.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-		split.add(scroll, javax.swing.JSplitPane.TOP);
 
 		bottomPane = new BottomPane();
+
+		split.add(scroll, javax.swing.JSplitPane.TOP);
 		split.add(bottomPane, javax.swing.JSplitPane.BOTTOM);
 
+		dbTree = new AdvancedTree();
+		dbTree.setVisible(false);
+		dbTree.setCellRenderer(new DBTreeCellRenderer());
+		dbTree.setRootVisible(false);		
 		add(split, BorderLayout.CENTER);
+		add(new JScrollPane(dbTree), BorderLayout.WEST);
 	}
-	
+
 	public void setResult(Component comp) {
 		if (comp instanceof JTable) {
 //			bottomPane.setText(null);
@@ -54,15 +77,21 @@ public class ConnectionPane extends JPanel {
 	
 	
 	public String getQuery() {
-		return sql.getText();
+		String selection = sql.getSelectedText();
+		return selection != null ? selection : sql.getText();
 	}
 
 	public void setQuery(String query) {
 		sql.setText(query);
 	}
-	
-	public void setTabelle(Table[] tabelle) {
-		model = new SqlCompletionModel();
+
+	public void setDatabaseProperties(DatabaseProperties dbProps) {
+		DBTreeModel root = new DBTreeModel(dbProps);
+		dbTree.setModel(new DefaultTreeModel(root));
+		dbTree.setVisible(true);
+	}
+
+	public void setTabelle(Collection<Table> tabelle) {
 		model.setTabelle(tabelle);
 
 //		sql = new TextPaneAutoCompletion(model);
@@ -71,8 +100,7 @@ public class ConnectionPane extends JPanel {
 		sql.setModel(model);
 	}
 	
-	public void setKeywords(String keys, String nFunction, String sFunction,
-			dbmanager.core.Type[] types) {
+	public void setKeywords(String keys, String nFunction, String sFunction, Collection<Type> types) {
 		// System.out.println("Parole Chiave: " + keys
 		// +"\nFunzioni Numeriche: "+nFunction+"\nFunzioni Stringa "+sFunction);
 
@@ -99,8 +127,8 @@ public class ConnectionPane extends JPanel {
 			model.addStringFunction(token);
 		}
 
-		for (int i = 0; i < types.length; i++) {
-			ssd.addDataType(types[i].getName());
+		for (Type type : types) {
+			ssd.addDataType(type.getName());
 		}
 
 		sql.setStyledDocument(ssd);
@@ -113,5 +141,7 @@ public class ConnectionPane extends JPanel {
 	private TextPaneAutoCompletion sql;
 	private SqlCompletionModel model;
 	private BottomPane bottomPane;
+	private AdvancedTree dbTree;
+
 
 }

@@ -14,6 +14,7 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.table.TableModel;
 
+import dbmanager.core.Catalog;
 import dbmanager.core.DatabaseProperties;
 import dbmanager.exporter.DbStruct;
 import dbmanager.exporter.XmlExporter;
@@ -78,13 +79,12 @@ public class ControllerMaster {
 			Connection conn = cm.openConnection();
 			if (conn != null && !conn.isClosed()) {
 				DatabaseMetaData dbMeta = conn.getMetaData();
-
 				prop = new DatabaseProperties(conn);
-				master.setTabelle(prop.getTables());
-
+				master.setDatabaseProperties(prop, conn.getCatalog(), conn.getSchema());
+				
 				master.setKeywords(dbMeta.getSQLKeywords(),
 						dbMeta.getNumericFunctions(),
-						dbMeta.getStringFunctions(), prop.getSupportedTypes());
+						dbMeta.getStringFunctions(), prop.getTypes());
 				master.setQuery("SELECT * FROM ");
 				master.setConnesso(true);
 				notifyPlugins(conn);
@@ -214,7 +214,7 @@ public class ControllerMaster {
 			report.setDati(dati);
 			return report.getReport();
 		} catch (Throwable e) {
-			master.appendMessage(e.getMessage() + '\n');
+			master.appendMessage(e.getMessage() + "\n");
 			e.printStackTrace();
 			return null;
 		}
@@ -320,9 +320,16 @@ public class ControllerMaster {
 	public void startDbCompare() {
 		try {
 			if (connections.size() >= 2) {
-				DatabaseProperties prop1 = new DatabaseProperties(connections.get(0).getConnection());
-				DatabaseProperties prop2 = new DatabaseProperties(connections.get(1).getConnection());
-				master.openCompareWindow(prop1, prop2);
+				Connection conn1 = connections.get(0).getConnection();
+				Connection conn2 = connections.get(1).getConnection();
+				
+				DatabaseProperties prop1 = new DatabaseProperties(conn1);
+				DatabaseProperties prop2 = new DatabaseProperties(conn2);
+				
+				Catalog c1 = prop1.getCatalog(conn1.getCatalog());
+				Catalog c2 = prop2.getCatalog(conn2.getCatalog());
+				
+				master.openCompareWindow(c1, c2);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

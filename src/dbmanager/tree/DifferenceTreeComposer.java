@@ -13,7 +13,9 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 
+import dbmanager.tools.CatalogDifferences;
 import dbmanager.tools.DifferenceResult;
+import dbmanager.tools.DifferenceResult.Subject;
 
 /**
  *
@@ -25,8 +27,8 @@ public class DifferenceTreeComposer{
         root = new DefaultMutableTreeNode("Database");
     }
 
-    public void setDifferences(DifferenceResult result){
-        setDifferences(root, null, result);
+    public void setDifferences(CatalogDifferences result){
+        setDifferences(root, "table", result);
     }
 
     public void setDifferences(DefaultMutableTreeNode whereAppend, String key, DifferenceResult result){
@@ -34,7 +36,7 @@ public class DifferenceTreeComposer{
         while (enums.hasMoreElements()){
             String differenceKey = (String)enums.nextElement();
             int diffType = result.getDiffType(differenceKey);
-            DifferenceTreeNode node = generateNode(diffType, differenceKey);
+            DifferenceTreeNode node = generateNode(diffType, differenceKey, result.getSubject());
             node.setDifferenceKey(key);
             whereAppend.add(node);
 
@@ -61,19 +63,20 @@ public class DifferenceTreeComposer{
         return new DefaultTreeModel(root);
     }
 
-    private DifferenceTreeNode generateNode(int diffType, String text){
+    private DifferenceTreeNode generateNode(int diffType, String text, Subject subject){
         DifferenceTreeNode node = null;
         switch (diffType) {
             case -1:
-                node = new DifferenceTreeNode(DifferenceTreeNode.DEL, text);
+                node = new DifferenceTreeNode(DifferenceTreeNode.DEL, text, subject);
                 break;
             case 0:
-                node = new DifferenceTreeNode(DifferenceTreeNode.NONE, text);
+                node = new DifferenceTreeNode(DifferenceTreeNode.NONE, text, subject);
                 break;
             case 1:
-                node = new DifferenceTreeNode(DifferenceTreeNode.ADD, text);
+                node = new DifferenceTreeNode(DifferenceTreeNode.ADD, text, subject);
                 break;
         }
+        
         return node;
     }
     

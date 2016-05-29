@@ -1,4 +1,5 @@
 package dbmanager.gui;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
@@ -18,6 +19,7 @@ public class BottomPane extends JPanel{
 		status = new Status();
 		scroller = new JScrollPane();
 		textarea = new JTextArea();
+		textarea.setFont(Font.getFont(Font.MONOSPACED));
 		setLayout(new GridBagLayout());
 
 		GridBagConstraints constr = new GridBagConstraints();
@@ -51,9 +53,9 @@ public class BottomPane extends JPanel{
 
 	public void showMessage(String message) {
 		dati = null;
-		textarea.append(message);
 		JViewport vw =  scroller.getViewport();
 		vw.setView(textarea);
+		textarea.append(message);
 	}
 	
 //	public void setText(JTextArea textarea){

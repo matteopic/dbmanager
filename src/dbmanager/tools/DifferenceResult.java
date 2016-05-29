@@ -20,12 +20,22 @@ import java.util.Set;
  */
 public class DifferenceResult {
 
-	public DifferenceResult() {
+	
+	public enum Subject{ Catalog, Schema, Table, Column, ColumnName, DataType, DataLength, Nullable, DefaultValue }
+	private Subject subject;
+
+	public DifferenceResult(Subject subject) {
+		this.subject = subject;
 		equality = new ArrayList<String>();
 		leftNotHave = new ArrayList<String>();
 		rightNotHave = new ArrayList<String>();
 		subs = new HashMap<String, DifferenceResult>();
 	}
+	
+	public Subject getSubject() {
+		return subject;
+	}
+	
 
 	public Enumeration<String> elements() {
 		int elementsSize = equality.size() + leftNotHave.size()

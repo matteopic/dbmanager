@@ -7,6 +7,8 @@ package dbmanager.tree;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import dbmanager.tools.DifferenceResult.Subject;
+
 /**
  *
  * @author Matteo Piccinini
@@ -21,16 +23,11 @@ public class DifferenceTreeNode extends DefaultMutableTreeNode {
 	public static final int DEL = 2;
 	public static final int NONE = 0;
 
-	public DifferenceTreeNode(int diffType, String nodeName) {
-		// if(diffType == ADD)
-		// setUserObject(">>> " + nodeName);
-		// else if(diffType == DEL)
-		// setUserObject("<<< " + nodeName);
-		//
-		// else if(diffType == NONE)
+	public DifferenceTreeNode(int diffType, String nodeName, Subject subject) {
 		setUserObject(nodeName);
 		this.diffType = diffType;
 		this.nodeName = nodeName;
+		this.subject = subject;
 	}
 
 	/**
@@ -55,4 +52,10 @@ public class DifferenceTreeNode extends DefaultMutableTreeNode {
 	public String getDifferenceKey() {
 		return differenceKey;
 	}
+	
+	public Subject getSubject() {
+		return subject;
+	}
+
+	private Subject subject;
 }

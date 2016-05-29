@@ -23,7 +23,13 @@ public class TableCellRenderer extends DefaultTableCellRenderer {
 		if (value == null){
 			value="(Null)";
 			setForeground(grigioBlu);
-		}else setForeground(defaultColor);
+		}
+		else if(value instanceof byte[]){
+			byte[] blob = (byte[])value;
+			value="(Binary "+blob.length+" bytes)";
+			setForeground(grigioBlu);
+		}
+		else setForeground(defaultColor);
 
         if (row % 2 == 0)setBackground(grigio);
         else setBackground(bianco);

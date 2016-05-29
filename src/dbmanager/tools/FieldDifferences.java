@@ -17,11 +17,12 @@ public class FieldDifferences extends AbstractDifferences{
 	
 
     public FieldDifferences(Column c1, Column c2){
+    	super(Subject.Column);
 //    	setSubDifferences("name", new DifferenceResult());
-    	setSubDifferences("type", new DifferenceResult());
-    	setSubDifferences("length", new DifferenceResult());
-    	setSubDifferences("nullable", new DifferenceResult());
-    	setSubDifferences("defaultValue", new DifferenceResult());
+    	setSubDifferences("type", new DifferenceResult(Subject.DataType));
+    	setSubDifferences("length", new DifferenceResult(Subject.DataLength));
+    	setSubDifferences("nullable", new DifferenceResult(Subject.Nullable));
+    	setSubDifferences("defaultValue", new DifferenceResult(Subject.DefaultValue));
 
 //    	String name1 = c1.getName();
 //    	String name2 = c2.getName();

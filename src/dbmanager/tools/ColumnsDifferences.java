@@ -11,6 +11,7 @@ import java.util.List;
 
 import dbmanager.core.Column;
 import dbmanager.core.Table;
+import dbmanager.tools.DifferenceResult.Subject;
 
 /**
  *
@@ -19,6 +20,7 @@ import dbmanager.core.Table;
 public class ColumnsDifferences extends AbstractDifferences{
 
     public ColumnsDifferences(Table table1, Table table2){
+    	super(Subject.ColumnName);
         this.table1 = table1;
         this.table2 = table2;
         List<String> columnNames1 = columnNamesList(table1);

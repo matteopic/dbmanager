@@ -14,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import dbmanager.report.FreemarkerReport;
 
@@ -23,7 +24,7 @@ public class MySQLResources implements Plugin {
 	private Connection conn;
 
 	public Component getToolbarComponent() {
-		btn = new JButton("Check");
+		btn = new JButton("MySQL Tuning Primer");
 		btn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -31,13 +32,16 @@ public class MySQLResources implements Plugin {
 			}
 		});
 		btn.setVisible(false);
-		return btn;
+
+		JPanel panel = new JPanel();
+		panel.add(btn);
+		return panel;
 	}
 
 	public void setCurrentConnection(Connection conn) {
 		//Non sono stato aggiunto alla toolbar
 		if(btn == null)return;
-		
+
 		this.conn = conn;		
 		if(conn == null){
 			btn.setVisible(false);

@@ -38,7 +38,7 @@ public class ButtonColumnTableModel implements TableModel{
 	}
 
  	public boolean isCellEditable(int rowIndex, int columnIndex){
-		if(columnIndex == 0)return false;
+		if(columnIndex == 0)return true;
 		return model.isCellEditable(rowIndex, columnIndex);
 	}
 

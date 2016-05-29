@@ -10,6 +10,7 @@ import java.util.List;
 
 import dbmanager.core.DatabaseProperties;
 import dbmanager.core.Table;
+import dbmanager.tools.DifferenceResult.Subject;
 
 /**
  *
@@ -18,6 +19,7 @@ import dbmanager.core.Table;
 public class TablesDifferences extends AbstractDifferences {
 
     public TablesDifferences(DatabaseProperties prop1, DatabaseProperties prop2){
+    	super(Subject.Table);
         this.prop1 = prop1;
         this.prop2 = prop2;
         List<String> tableNames1 = tableNamesList(prop1);
